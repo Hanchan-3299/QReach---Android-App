@@ -1,17 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="customEditText">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
+    <style name="customEditText" parent="Widget.AppCompat.EditText">
         <item name="android:ems">10</item>
         <item name="android:minHeight">48dp</item>
         <item name="android:textAlignment">center</item>
         <item name="android:textColorHint">@color/gray</item>
     </style>
     
-    <style name="customButton">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
+    <style name="customButton" parent="Widget.Material3.Button">
         <item name="android:backgroundTint">@color/lightBlue</item>
     </style>
 </resources>
