@@ -1,6 +1,8 @@
 package com.example.qreach;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,5 +31,14 @@ public class LoginActivity extends AppCompatActivity {
         new android.os.Handler().postDelayed(() -> {
             isLoading = false;
         }, 500);
+
+        Button btnLogin = findViewById(R.id.btnLogin);
+        btnLogin.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        });
+
+
     }
 }
