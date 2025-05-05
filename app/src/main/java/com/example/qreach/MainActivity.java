@@ -2,10 +2,13 @@ package com.example.qreach;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.sax.StartElementListener;
 import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -50,5 +53,24 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         });
+
+
+        Button btnScanner = findViewById(R.id.btnScanner);
+        btnScanner.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, QRScanner.class);
+            startActivityForResult(intent, 123);
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 123 && resultCode == RESULT_OK && data != null) {
+            String scannedResult = data.getStringExtra("Scanned Result");
+            Toast.makeText(this, "QR Result : " + scannedResult, Toast.LENGTH_LONG).show();
+
+            //insert ke Database nanti disini
+        }
     }
 }
