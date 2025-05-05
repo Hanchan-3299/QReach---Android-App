@@ -38,24 +38,38 @@ public class LoginActivity extends AppCompatActivity {
         sp.setKeepOnScreenCondition(() -> isLoading);
         new android.os.Handler().postDelayed(() -> {
             isLoading = false;
+
+            LoginHandler.checkLogin(LoginActivity.this, new LoginHandler.CallBack() {
+                @Override
+                public void onSuccess(JSONObject data) {
+                    runOnUiThread(() -> {
+                        String id = null;
+
+                        try {
+                            id = data.getString("id");
+                            String email = data.getString("email");
+
+                            Toast.makeText(LoginActivity.this, "You has logged in", Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            intent.putExtra("userID", id);
+                            intent.putExtra("userEmail", email);
+                            startActivity(intent);
+                            finish();
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
+                }
+
+                @Override
+                public void onError(String message) {
+                    Log.e("checkLogin", "Error : " + message);
+                }
+            });
+
         }, 500);
 
-        LoginHandler.checkLogin(new LoginHandler.CallBack() {
-            @Override
-            public void onSuccess(JSONObject data) {
-                runOnUiThread(() -> {
-                    Toast.makeText(LoginActivity.this, "You has logged in", Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
-                });
-            }
 
-            @Override
-            public void onError(String message) {
-                Log.e("checkLogin", "Error : " + message);
-            }
-        });
         EditText txtEmail = findViewById(R.id.txtEmail);
         EditText txtPassword = findViewById(R.id.txtPassword);
         Button btnLogin = findViewById(R.id.btnLogin);
@@ -64,7 +78,7 @@ public class LoginActivity extends AppCompatActivity {
 //            startActivity(intent);
 //            finish();
 
-            LoginHandler.login(txtEmail.getText().toString(), txtPassword.getText().toString(), new LoginHandler.CallBack() {
+            LoginHandler.login(LoginActivity.this, txtEmail.getText().toString(), txtPassword.getText().toString(), new LoginHandler.CallBack() {
                 @Override
                 public void onSuccess(JSONObject data) {
                     runOnUiThread(() -> {
