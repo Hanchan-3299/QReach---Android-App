@@ -35,7 +35,7 @@ public class QRScanner extends Activity {
                 Toast.makeText(this, "cancelled", Toast.LENGTH_LONG).show();
             }else {
                 String scannedData = result.getContents();
-                Toast.makeText(this, "scanned result : " + scannedData, Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "data has been scanned", Toast.LENGTH_LONG).show();
 
                 Intent intent = new Intent();
                 intent.putExtra("Scanned Result", scannedData);

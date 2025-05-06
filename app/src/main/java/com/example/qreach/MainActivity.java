@@ -14,17 +14,23 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.qreach.apihandler.AbsenHandler;
 import com.example.qreach.apihandler.LoginHandler;
 
 import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
+    private String userId, userEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+
+        userId = getIntent().getStringExtra("userID");
+        userEmail = getIntent().getStringExtra("userEmail");
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -68,9 +74,23 @@ public class MainActivity extends AppCompatActivity {
 
         if (requestCode == 123 && resultCode == RESULT_OK && data != null) {
             String scannedResult = data.getStringExtra("Scanned Result");
-            Toast.makeText(this, "QR Result : " + scannedResult, Toast.LENGTH_LONG).show();
+//            Toast.makeText(this, "QR Result : " + scannedResult, Toast.LENGTH_LONG).show();
 
-            //insert ke Database nanti disini
+            AbsenHandler.sendAbsen(this, userId, userEmail, scannedResult, new AbsenHandler.CallBack() {
+                @Override
+                public void onSuccess(JSONObject data) {
+                    runOnUiThread(() -> {
+                        Toast.makeText(MainActivity.this, "Absen success", Toast.LENGTH_LONG).show();
+                    });
+                }
+
+                @Override
+                public void onError(String message) {
+                    runOnUiThread(() -> {
+                        Toast.makeText(MainActivity.this, "Absen failed", Toast.LENGTH_LONG).show();
+                    });
+                }
+            });
         }
     }
 }
